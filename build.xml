@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="lacomunitydb" default="create">
+    <target name="update">
+        <taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask" />
+
+        <echo msg="Loading database settings" />
+        <property file="./db.properties" />
+
+        <echo msg="Creating build directory" />
+        <mkdir dir="./build" />
+
+        <echo msg="Calculating changes" />
+        <dbdeploy
+                url="mysql:host=${db.host};dbname=${db.name}"
+                userid="${db.user}"
+                password="${db.pass}"
+                dir="./db/deltas"
+                outputfile="./build/deploy.sql"
+                undooutputfile="./build/undo.sql" />
+
+        <echo msg="Deploying changes" />
+        <exec
+                command="mysql -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; deploy.sql"
+                dir="./build"
+                output="result.log"
+                checkreturn="true" />
+    </target>
+</project>
