@@ -1,1 +1,3 @@
 It is expected that the configured db already exists and have the changelog table.
+
+When you want to load the deltas, you have to do docker run, and go to the '/ phing' folder and launch the 'start.sh' script twice to load the deltas
